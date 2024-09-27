@@ -14,6 +14,6 @@ class ProductManagerController extends Controller
     public function produtosList(Request $request): JsonResponse
     {
         $produtos = Products::all();
-        return response()->json($produtos);
+        return response()->json(['debug' => $produtos]);
     }
 };
