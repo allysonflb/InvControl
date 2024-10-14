@@ -1,5 +1,9 @@
 Banco -> Postgres
 
+instalar composer
+
+instalar php (pode ser via xamp no caso de windows)
+
 Pra rodar o banco, criar com o nome invcontrol e rodar as migrations do projeto.
 
 Comando -> php artisan migrate.
