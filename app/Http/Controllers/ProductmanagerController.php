@@ -16,4 +16,35 @@ class ProductManagerController extends Controller
         $produtos = Products::all();
         return response()->json(['debug' => $produtos]);
     }
+
+    // Método para atualizar um produto
+    public function update(Request $request, $id)
+    {
+        $product = Products::find($id);
+
+        if (!$product) {
+            return response()->json(['message' => 'Produto não encontrado.'], 404);
+        }
+
+        $product->update($request->only('nome', 'preco', 'quantidade', 'descricao'));
+
+        return response()->json([
+            'message' => 'Produto atualizado com sucesso!',
+            'product' => $product,
+        ], 200);
+    }
+
+    // Método para deletar um produto
+    public function destroy($id)
+    {
+        $product = Products::find($id);
+
+        if (!$product) {
+            return response()->json(['message' => 'Produto não encontrado.'], 404);
+        }
+
+        $product->delete();
+
+        return response()->json(['message' => 'Produto deletado com sucesso!'], 200);
+    }
 };
