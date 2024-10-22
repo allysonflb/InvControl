@@ -16,4 +16,4 @@ class ProductManagerController extends Controller
         $produtos = Products::all();
         return response()->json(['debug' => $produtos]);
     }
-};
+};  
