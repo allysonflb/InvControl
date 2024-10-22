@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-use illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Products;
 
 
@@ -22,9 +22,9 @@ class ProductManagerController extends Controller
         // Validação dos dados enviados
         $validator = Validator::make($request->all(), [
             'nome' => 'required|string|max:255',
-            'preco' => 'required|string',
-            'quantidade' => 'required|numeric|min:0',
-            'descricao' => 'required|integer|min:1',
+            'preco' => 'required|numeric|min:0', // Validação para aceitar ponto decimal
+            'quantidade' => 'required|numeric|min:0', // Quantidade também é numérico
+            'descricao' => 'required|string|max:1000', // Descrição como string, com limite opcional de caracteres
         ]);
 
         // Se a validação falhar, retornar um erro
@@ -54,7 +54,8 @@ class ProductManagerController extends Controller
 
     public function produtosUpdate(Request $request, $id): JsonResponse
     {
-        $produto = Products::find($id);
+
+        $produto = Products::findOrFail($id);
         $produto->nome = $request->nome;
         $produto->preco = $request->preco;
         $produto->quantidade = $request->quantidade;
