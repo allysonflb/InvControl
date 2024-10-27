@@ -14,6 +14,12 @@ class ProductManagerController extends Controller
     public function produtosList(): JsonResponse
     {
         $produtos = Products::all();
+
+        $produtos = $produtos->map(function ($produto, $index) {
+            $produto->id = $index + 1;
+            return $produto;
+        });
+        
         return response()->json(['Produtos:' => $produtos]);
     }
 
