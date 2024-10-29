@@ -14,6 +14,12 @@ class ProductManagerController extends Controller
     public function produtosList(): JsonResponse
     {
         $produtos = Products::all();
+
+        $produtos = $produtos->map(function ($produto, $index) {
+            $produto->id = $index + 1;
+            return $produto;
+        });
+        
         return response()->json(['Produtos:' => $produtos]);
     }
 
@@ -90,7 +96,17 @@ class ProductManagerController extends Controller
     {
         $produto = Products::findOrFail($id);
         $produto->delete();
-        return response()->json(['Produto deletado:' => $produto]);
+    
+        // Cria um array apenas com os dados que você deseja retornar
+        $responseData = [
+            'id' => $produto->id,
+            'nome' => $produto->nome,
+            'preco' => number_format($produto->preco, 2, '.', ''), // Formata o preço para string com duas casas decimais
+            'quantidade' => $produto->quantidade,
+            'descricao' => $produto->descricao,
+        ];
+    
+        return response()->json(['Produto deletado:' => $responseData]);
     }
 
 };
