@@ -119,7 +119,15 @@ export const PasswordResetPage = () => {
               <Input />
             </Form.Item>
             <Form.Item>
-              <Flex align="center" gap="small">
+              <Flex align="center" gap="15px">
+                <Button 
+                  type="default" 
+                  size="middle"
+                  // style={{marginLeft: '15px'}} 
+                  onClick={() => navigate(PATH_AUTH.signin)}
+                  loading={loading}>
+                  Cancelar
+                </Button>
                 <Button
                   type="primary"
                   htmlType="submit"
@@ -127,13 +135,6 @@ export const PasswordResetPage = () => {
                   loading={loading}
                 >
                   Enviar
-                </Button>
-                <Button 
-                  type="text" 
-                  size="middle" 
-                  onClick={() => navigate(PATH_AUTH.signin)}
-                  loading={loading}>
-                  Cancelar
                 </Button>
               </Flex>
             </Form.Item>

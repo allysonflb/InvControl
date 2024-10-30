@@ -145,7 +145,7 @@ export const SignUpPage = () => {
                   rules={[
                     {
                       required: true,
-                      message: 'Please input your first name!',
+                      message: 'Por favor coloque o seu primeiro nome!',
                     },
                   ]}
                 >
@@ -157,7 +157,7 @@ export const SignUpPage = () => {
                   label="Sobrenome"
                   name="lastName"
                   rules={[
-                    { required: true, message: 'Please input your last name!' },
+                    { required: true, message: 'Por favor coloque seu sobrenome!' },
                   ]}
                 >
                   <Input />
@@ -168,7 +168,7 @@ export const SignUpPage = () => {
                   label="Email"
                   name="email"
                   rules={[
-                    { required: true, message: 'Please input your email' },
+                    { required: true, message: 'Por favor coloque seu email' },
                   ]}
                 >
                   <Input />
@@ -179,7 +179,7 @@ export const SignUpPage = () => {
                   label="Senha"
                   name="password"
                   rules={[
-                    { required: true, message: 'Please input your password!' },
+                    { required: true, message: 'Por favor coloque sua senha!' },
                   ]}
                 >
                   <Input.Password />
@@ -192,7 +192,7 @@ export const SignUpPage = () => {
                   rules={[
                     {
                       required: true,
-                      message: 'Please ensure passwords match!',
+                      message: 'Verifique se as senhas coincidem!',
                     },
                   ]}
                 >
@@ -209,14 +209,24 @@ export const SignUpPage = () => {
               </Col>
             </Row>
             <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                size="middle"
-                loading={loading}
-              >
-                Cadastrar
-              </Button>
+              <Flex align="center" gap="15px">
+                <Button
+                  type="default"
+                  size="middle"
+                  loading={loading}
+                  onClick={() => navigate(PATH_AUTH.signin)}
+                >
+                  Voltar
+                </Button>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  size="middle"
+                  loading={loading}
+                >
+                  Cadastrar
+                </Button>
+              </Flex>
             </Form.Item>
           </Form>
         </Flex>
