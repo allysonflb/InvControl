@@ -154,18 +154,14 @@ export const SignInPage = () => {
                     <Checkbox>Lembre-me</Checkbox>
                     <Button
                     type="link"
-                    htmlType="submit"
                     size="middle"
-                    loading={loading}
                     onClick={handleButtonCreateAccount}
                   >
                     Crie sua conta
                   </Button>
                   <Button
                     type="link"
-                    htmlType="submit"
                     size="middle"
-                    loading={loading}
                     onClick={handleButtonClick}
                   >
                     Esqueceu sua senha?
