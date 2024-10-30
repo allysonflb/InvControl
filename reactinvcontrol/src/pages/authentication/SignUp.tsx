@@ -11,11 +11,6 @@ import {
   theme,
   Typography,
 } from 'antd';
-import {
-  FacebookFilled,
-  GoogleOutlined,
-  TwitterOutlined,
-} from '@ant-design/icons';
 import { Logo } from '../../components';
 import { useMediaQuery } from 'react-responsive';
 import { PATH_AUTH, PATH_DASHBOARD } from '../../constants';
@@ -41,23 +36,67 @@ export const SignUpPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
+  const onFinish = async (values: FieldType) => {
     setLoading(true);
 
-    message.open({
-      type: 'success',
-      content: 'Account signup successful',
-    });
+    // Validação adicional para verificar se as senhas coincidem
+    if (values.password !== values.cPassword) {
+      message.error('As senhas não correspondem!');
+      setLoading(false);
+      return;
+    }
 
-    setTimeout(() => {
-      navigate(PATH_DASHBOARD.default);
-    }, 5000);
+    try {
+      // Fazer a requisição POST para o backend usando fetch
+      const response = await fetch('http://localhost/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: `${values.firstName} ${values.lastName}`, // Enviando nome completo
+          email: values.email,
+          password: values.password,
+          password_confirmation: values.cPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && !response.redirected) {
+        setTimeout(() => {
+            navigate(PATH_AUTH.signin);
+        }, 1000);
+      }
+
+      if (!response.ok) {
+        if (data.errors) {
+          // Exibir erros específicos do backend
+          if (data.errors.email) {
+            message.error('O email já está em uso.');
+          } else if (data.errors.password) {
+            message.error('A senha deve ter pelo menos 8 caracteres.');
+          }
+        } else {
+          message.error('Erro ao cadastrar usuário.');
+        }
+        return;
+      }
+  
+      message.success('Usuário cadastrado com sucesso!');
+      // Redirecionar ou realizar outras ações necessárias
+    } catch (error) {
+      message.error('Erro ao cadastrar usuário.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
+    message.error('Erro ao preencher o formulário.'); // Mensagem para o usuário
   };
+  
 
   return (
     <Row style={{ minHeight: isMobile ? 'auto' : '100vh', overflow: 'hidden' }}>
@@ -71,11 +110,10 @@ export const SignUpPage = () => {
         >
           <Logo color="white" />
           <Title level={2} className="text-white">
-            Welcome to Antd Admin
+            Bem-vindo ao InvControl
           </Title>
           <Text className="text-white" style={{ fontSize: 18 }}>
-            A dynamic and versatile multipurpose dashboard utilizing Ant Design,
-            React, TypeScript, and Vite.
+            Sistema desenvolvido para a Vilalt Café.
           </Text>
         </Flex>
       </Col>
@@ -87,22 +125,7 @@ export const SignUpPage = () => {
           gap="middle"
           style={{ height: '100%', padding: '2rem' }}
         >
-          <Title className="m-0">Create an account</Title>
-          <Flex gap={4}>
-            <Text>Already have an account?</Text>
-            <Link href={PATH_AUTH.signin}>Sign in here</Link>
-          </Flex>
-          <Flex
-            vertical={isMobile}
-            gap="small"
-            wrap="wrap"
-            style={{ width: '100%' }}
-          >
-            <Button icon={<GoogleOutlined />}>Sign up with Google</Button>
-            <Button icon={<FacebookFilled />}>Sign up with Facebook</Button>
-            <Button icon={<TwitterOutlined />}>Sign up with Twitter</Button>
-          </Flex>
-          <Divider className="m-0">or</Divider>
+          <Title className="m-0">Crie uma conta</Title>
           <Form
             name="sign-up-form"
             layout="vertical"
@@ -117,7 +140,7 @@ export const SignUpPage = () => {
             <Row gutter={[8, 0]}>
               <Col xs={24} lg={12}>
                 <Form.Item<FieldType>
-                  label="First name"
+                  label="Nome"
                   name="firstName"
                   rules={[
                     {
@@ -131,7 +154,7 @@ export const SignUpPage = () => {
               </Col>
               <Col xs={24} lg={12}>
                 <Form.Item<FieldType>
-                  label="Last name"
+                  label="Sobrenome"
                   name="lastName"
                   rules={[
                     { required: true, message: 'Please input your last name!' },
@@ -153,7 +176,7 @@ export const SignUpPage = () => {
               </Col>
               <Col xs={24}>
                 <Form.Item<FieldType>
-                  label="Password"
+                  label="Senha"
                   name="password"
                   rules={[
                     { required: true, message: 'Please input your password!' },
@@ -164,7 +187,7 @@ export const SignUpPage = () => {
               </Col>
               <Col xs={24}>
                 <Form.Item<FieldType>
-                  label="Confirm password"
+                  label="Confirme a senha"
                   name="cPassword"
                   rules={[
                     {
@@ -179,8 +202,8 @@ export const SignUpPage = () => {
               <Col xs={24}>
                 <Form.Item<FieldType> name="terms" valuePropName="checked">
                   <Flex>
-                    <Checkbox>I agree to</Checkbox>
-                    <Link>terms and conditions</Link>
+                    <Checkbox>Eu concordo com</Checkbox>
+                    <Link>termos e condições de uso</Link>
                   </Flex>
                 </Form.Item>
               </Col>
@@ -192,7 +215,7 @@ export const SignUpPage = () => {
                 size="middle"
                 loading={loading}
               >
-                Submit
+                Cadastrar
               </Button>
             </Form.Item>
           </Form>

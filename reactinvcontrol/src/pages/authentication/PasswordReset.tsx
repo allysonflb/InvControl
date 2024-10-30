@@ -11,7 +11,7 @@ import {
 } from 'antd';
 import { Logo } from '../../components';
 import { useMediaQuery } from 'react-responsive';
-import { PATH_DASHBOARD } from '../../constants';
+import { PATH_AUTH, PATH_DASHBOARD } from '../../constants';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -29,18 +29,41 @@ export const PasswordResetPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
+  const onFinish = async (values: any) => {
     setLoading(true);
+  
+    try {
+      // Realiza a requisição para o backend para redefinir a senha
+      const response = await fetch('http://localhost/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: values.email }),
+      });
+  
+      const data = await response.json();
 
-    message.open({
-      type: 'success',
-      content: 'Link para nova senha enviado com sucesso.',
-    });
+      console.log(response);
 
+      // Verifica se a resposta foi bem-sucedida e contém o status esperado
+      if (response.ok && data.status === 'Senha resetada para o default -> 1234') {
+        message.success('Senha redefinida para o padrão com sucesso.');
+      } else if (data.error === 'Usuario não encontrado') {
+        message.error('Usuário não encontrado.');
+      } else {
+        message.error('Falha ao redefinir a senha.');
+      }
+    } catch (error) {
+      message.error('Erro na solicitação. Tente novamente mais tarde.');
+    } finally {
+      setLoading(false);
+    }
+  
+    // Redireciona após 3 segundos (opcional)
     setTimeout(() => {
-      navigate(PATH_DASHBOARD.default);
-    }, 5000);
+      navigate(PATH_AUTH.signin);
+    }, 3000);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -105,7 +128,11 @@ export const PasswordResetPage = () => {
                 >
                   Enviar
                 </Button>
-                <Button type="text" size="middle" loading={loading}>
+                <Button 
+                  type="text" 
+                  size="middle" 
+                  onClick={() => navigate(PATH_AUTH.signin)}
+                  loading={loading}>
                   Cancelar
                 </Button>
               </Flex>
