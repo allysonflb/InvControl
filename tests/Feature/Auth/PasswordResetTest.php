@@ -3,47 +3,47 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
-use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class PasswordResetTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_reset_password_link_can_be_requested(): void
+    /** @test */
+    public function Reset_senha_usuario_existe()
     {
-        Notification::fake();
+        // Cria um usuário com um email específico
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('old_password'),
+        ]);
 
-        $user = User::factory()->create();
+        // Define os dados da requisição
+        $response = $this->postJson('/forgot-password', [
+            'email' => 'test@example.com',
+        ]);
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+        // Verifica se a resposta é a esperada
+        $response->assertStatus(Response::HTTP_CREATED)
+                 ->assertJson(['status' => 'Senha resetada para o default']);
 
-        Notification::assertSentTo($user, ResetPassword::class);
+        // Verifica se a senha foi atualizada para o padrão "1234"
+        $this->assertTrue(Hash::check('1234', $user->fresh()->password));
     }
 
-    public function test_password_can_be_reset_with_valid_token(): void
+    /** @test */
+    public function Falha_usuario_nao_existe()
     {
-        Notification::fake();
+        // Define um email que não corresponde a nenhum usuário
+        $response = $this->postJson('/forgot-password', [
+            'email' => 'nonexistent@example.com',
+        ]);
 
-        $user = User::factory()->create();
-
-        $this->post('/forgot-password', ['email' => $user->email]);
-
-        Notification::assertSentTo($user, ResetPassword::class, function (object $notification) use ($user) {
-            $response = $this->post('/reset-password', [
-                'token' => $notification->token,
-                'email' => $user->email,
-                'password' => 'password',
-                'password_confirmation' => 'password',
-            ]);
-
-            $response
-                ->assertSessionHasNoErrors()
-                ->assertStatus(200);
-
-            return true;
-        });
+        // Verifica se a resposta é a esperada
+        $response->assertStatus(Response::HTTP_NOT_FOUND)
+                 ->assertJson(['error' => 'Usuario não encontrado']);
     }
 }

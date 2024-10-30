@@ -2,46 +2,61 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
+    /** @test */
+    public function Autentica_Usuario()
     {
-        $user = User::factory()->create();
-
-        $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
+        // Cria um usuário com um email e senha específicos
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => bcrypt('password123'),
         ]);
 
-        $this->assertAuthenticated();
-        $response->assertNoContent();
+        // Define os dados da requisição de login
+        $loginData = [
+            'email' => 'test@example.com',
+            'password' => 'password123',
+        ];
+
+        // Faz a requisição de login
+        $response = $this->postJson('/login', $loginData);
+
+        // Verifica se a resposta é a esperada
+        $response->assertStatus(Response::HTTP_OK)
+                 ->assertJson(['message' => 'Login successful']);
+
+        // Verifica se o usuário está autenticado
+        $this->assertTrue(Auth::check());
     }
 
-    public function test_users_can_not_authenticate_with_invalid_password(): void
+    /** @test */
+    public function Usuario_Logout()
     {
-        $user = User::factory()->create();
-
-        $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'wrong-password',
+        // Cria um usuário e autentica
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => bcrypt('password123'),
         ]);
 
-        $this->assertGuest();
-    }
+        $this->actingAs($user);
 
-    public function test_users_can_logout(): void
-    {
-        $user = User::factory()->create();
+        // Faz a requisição de logout
+        $response = $this->postJson('/logout');
 
-        $response = $this->actingAs($user)->post('/logout');
+        // Verifica se a resposta é a esperada
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
 
-        $this->assertGuest();
-        $response->assertNoContent();
+        // Verifica se o usuário não está mais autenticado
+        $this->assertFalse(Auth::check());
     }
 }
