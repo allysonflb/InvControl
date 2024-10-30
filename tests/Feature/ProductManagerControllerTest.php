@@ -13,7 +13,7 @@ class ProductManagerControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_lists_all_products()
+    public function Listagem_todos_produtos()
     {
         // Cria alguns produtos para serem listados
         Products::factory()->count(3)->create();
@@ -27,7 +27,7 @@ class ProductManagerControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_creates_a_new_product_with_valid_data()
+    public function Criacao_de_produto_com_data_valido()
     {
         $data = [
             'nome' => 'Produto Exemplo',
@@ -68,7 +68,7 @@ class ProductManagerControllerTest extends TestCase
 
 
     /** @test */
-    public function it_fails_to_create_a_product_with_invalid_data()
+    public function Criacao_de_produto_com_data_invalido()
     {
         $data = [
             'nome' => '',
@@ -86,7 +86,7 @@ class ProductManagerControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_updates_an_existing_product_with_valid_data()
+    public function Update_de_produto_com_data_valido()
     {
         $produto = Products::factory()->create();
 
@@ -107,7 +107,7 @@ class ProductManagerControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_fails_to_update_a_product_with_invalid_data()
+    public function Update_de_produto_com_data_invalido()
     {
         $produto = Products::factory()->create();
 
@@ -127,7 +127,7 @@ class ProductManagerControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_deletes_a_product()
+    public function DeletarProduto()
     {
         // Cria um produto que será deletado
         $produto = Products::create([
