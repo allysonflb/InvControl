@@ -23,32 +23,32 @@ export const ProjectsTable = ({ data, ...others }: Props) => {
   const COLUMNS = [
     {
       title: 'ID',
-      dataIndex: 'team_size',
-      key: 'proj_team_size',
+      dataIndex: 'id',
+      key: 'nome',
     },
     {
       title: 'Produto',
-      dataIndex: 'project_name',
-      key: 'proj_name',
-      render: (_: any, { project_name }: Projects) => (
+      dataIndex: 'nome',
+      key: 'nome',
+      render: (_: any, { nome }: Projects) => (
         <Typography.Paragraph
           ellipsis={{ rows: 1 }}
           className="text-capitalize"
           style={{ marginBottom: 0 }}
         >
-          {project_name.substring(0, 20)}
+          {nome.substring(0, 20)}
         </Typography.Paragraph>
       ),
     },
     {
       title: 'Descrição',
-      dataIndex: 'team_size',
-      key: 'proj_team_size',
+      dataIndex: 'descricao',
+      key: 'descricao',
     },
     {
       title: 'Quantidade',
-      dataIndex: 'client_name',
-      key: 'proj_client_name',
+      dataIndex: 'quantidade',
+      key: 'quantidade',
     },
     {
       title: 'Ação',
