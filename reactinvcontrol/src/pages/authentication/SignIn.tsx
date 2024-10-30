@@ -32,22 +32,53 @@ export const SignInPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: FieldType) => {
     console.log('Success:', values);
     setLoading(true);
 
-    message.open({
-      type: 'success',
-      content: 'Login successful',
-    });
+    try {
+        const response = await fetch('http://localhost/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: values.email,
+                password: values.password,
+            }),
+        });
 
-    setTimeout(() => {
-      navigate(PATH_DASHBOARD.default);
-    }, 5000);
-  };
+        // Se o status for 200 e não houver redirecionamento, o login foi bem-sucedido
+        if (response.ok && !response.redirected) {
+            message.open({
+                type: 'success',
+                content: 'Login bem-sucedido.',
+            });
+            setTimeout(() => {
+                navigate(PATH_DASHBOARD.default);
+            }, 1000);
+        } else {
+            const errorData = await response.json();
+            message.error(errorData.message || 'Login falhou. Verifique suas credenciais.');
+        }
+    } catch (error) {
+        message.error('Login falhou. Verifique suas credenciais.');
+    } finally {
+        setLoading(false);
+    }
+};
+  
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
+  };
+
+  const handleButtonClick = () => {
+    navigate(PATH_AUTH.passwordReset);
+  };
+
+  const handleButtonCreateAccount = () => {
+    navigate(PATH_AUTH.signup);
   };
 
   return (
@@ -119,7 +150,23 @@ export const SignInPage = () => {
               </Col>
               <Col xs={24}>
                 <Form.Item<FieldType> name="remember" valuePropName="checked">
-                  <Checkbox>Lembre-me</Checkbox>
+                  <Flex align='center' justify='space-between'>
+                    <Checkbox>Lembre-me</Checkbox>
+                    <Button
+                    type="link"
+                    size="middle"
+                    onClick={handleButtonCreateAccount}
+                  >
+                    Crie sua conta
+                  </Button>
+                  <Button
+                    type="link"
+                    size="middle"
+                    onClick={handleButtonClick}
+                  >
+                    Esqueceu sua senha?
+                  </Button>
+                  </Flex>
                 </Form.Item>
               </Col>
             </Row>
@@ -133,7 +180,6 @@ export const SignInPage = () => {
                 >
                   Continuar
                 </Button>
-                <Link href={PATH_AUTH.passwordReset}>Esqueceu sua senha?</Link>
               </Flex>
             </Form.Item>
           </Form>
