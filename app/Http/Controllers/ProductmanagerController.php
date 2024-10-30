@@ -25,7 +25,6 @@ class ProductManagerController extends Controller
 
     public function produtosCreate(Request $request): JsonResponse
     {
-        // Validação dos dados enviados
         $validator = Validator::make($request->all(), [
             'nome' => 'required|string|max:255',
             'preco' => 'required|numeric|min:0', 
@@ -33,7 +32,6 @@ class ProductManagerController extends Controller
             'descricao' => 'required|string|max:1000', 
         ]);
 
-        // Se a validação falhar, retornar um erro
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
@@ -97,11 +95,10 @@ class ProductManagerController extends Controller
         $produto = Products::findOrFail($id);
         $produto->delete();
     
-        // Cria um array apenas com os dados que você deseja retornar
         $responseData = [
             'id' => $produto->id,
             'nome' => $produto->nome,
-            'preco' => number_format($produto->preco, 2, '.', ''), // Formata o preço para string com duas casas decimais
+            'preco' => number_format($produto->preco, 2, '.', ''),
             'quantidade' => $produto->quantidade,
             'descricao' => $produto->descricao,
         ];
