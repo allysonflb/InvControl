@@ -16,6 +16,7 @@ import { useMediaQuery } from 'react-responsive';
 import { PATH_AUTH, PATH_DASHBOARD } from '../../constants';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { BASE_URL } from '../../global';
 
 const { Title, Text, Link } = Typography;
 
@@ -48,7 +49,7 @@ export const SignUpPage = () => {
 
     try {
       // Fazer a requisição POST para o backend usando fetch
-      const response = await fetch('http://localhost/register', {
+      const response = await fetch(`${BASE_URL}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -14,6 +14,7 @@ import { useMediaQuery } from 'react-responsive';
 import { PATH_AUTH, PATH_DASHBOARD } from '../../constants';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { BASE_URL } from '../../global';
 
 const { Title, Text } = Typography;
 
@@ -34,7 +35,7 @@ export const PasswordResetPage = () => {
   
     try {
       // Realiza a requisição para o backend para redefinir a senha
-      const response = await fetch('http://localhost/forgot-password', {
+      const response = await fetch(`${BASE_URL}/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

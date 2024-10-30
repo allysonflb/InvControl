@@ -15,6 +15,7 @@ import { useMediaQuery } from 'react-responsive';
 import { PATH_AUTH, PATH_DASHBOARD } from '../../constants';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { BASE_URL } from '../../global';
 
 const { Title, Text, Link } = Typography;
 
@@ -37,7 +38,7 @@ export const SignInPage = () => {
     setLoading(true);
 
     try {
-        const response = await fetch('http://localhost/login', {
+        const response = await fetch(`${BASE_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
