@@ -53,7 +53,7 @@ const items: MenuProps['items'] = [
     'about',
     <InfoCircleOutlined />
   ),
-  getItem(<Link to={PATH_LANDING.root}>Voltar</Link>, 'nada', <BackButton />),
+  getItem(<Link to={PATH_LANDING.root}>Sair</Link>, 'signout', <BackButton />),
 ];
 
 const rootSubmenuKeys = ['dashboards', 'corporate', 'user-profile'];
@@ -105,7 +105,7 @@ const SideNav = ({ ...others }: SideNavProps) => {
           href={PATH_LANDING.root}
           justify="center"
           gap="small"
-          imgSize={{ h: 28, w: 28 }}
+          imgSize={{ h: 40, w: 40 }}
           style={{ padding: '1rem 0' }}
         />
         <Menu
