@@ -1,16 +1,21 @@
-Banco -> Postgres
+Procedimentos de instalação do projeto:
 
-instalar composer
+Backend:
+* Banco -> Postgres
+* Instalar XAMP(Windows) Ou PHP (Linux, MacOS)
+* Instalar composer
+* Clonar o projeto
+* Na raiz do projeto rodar o comando composer update
+* Setup do Banco:
+* * Criar banco com o nome invcontrol e senha 1234
+* Rodar o comando php artisan migrate
 
-instalar php (pode ser via xamp no caso de windows)
-
-Pra rodar o banco, criar com o nome invcontrol e rodar as migrations do projeto.
-
-Comando -> php artisan migrate.
-
-Rodem via xamp ou linux via sudo php artisan server --port=80 
-
-Veja como instalar o artisan diretamente no site do mesmo.
+FrontEnd:
+* Acessar a raiz do frontend na pasta reactinvcontrol, rodar o comando cp .env.example .env
+* Gerar uma key de autenticaçao do artisan com o comando php artisan key:generate
+* Deixar no env apenas a estrutura de APP Key e a parte de DB, configurando corretamente para o banco do projeto.
+* Rodar o comando npm run install:legacy e aguardar a finalização da instalação
+* Realizar o setup da rota de backend em src/global.ts , caso seja windows é diferente do que está no projeto.
+* Rodar o projeto com npm run dev
 
 
-Test -- README
