@@ -7,6 +7,7 @@
     <h3>Backend:</h3>
     <p>Laravel 10x</p>
     <img src="https://img.icons8.com/?size=100&id=hUvxmdu7Rloj&format=png&color=000000" height="30" width="32" alt="Laravel logo" />
+    <img src="https://img.icons8.com/?size=100&id=38561&format=png&color=000000" height="30" width="32" alt="Laravel logo" />
     <h3>Frontend:</h3>
     <p>React com VITE e template antd-multipurpose-dashboard</p>
     <img src="https://img.icons8.com/?size=100&id=NfbyHexzVEDk&format=png&color=000000" height="30" width="32" alt="React logo" />
