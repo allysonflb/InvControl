@@ -46,9 +46,9 @@ export const PasswordResetPage = () => {
       const data = await response.json();
 
       console.log(response);
-
+      console.log(data.status);
       // Verifica se a resposta foi bem-sucedida e contém o status esperado
-      if (response.ok && data.status === 'Senha resetada para o default -> 1234') {
+      if (response.ok && data.status === 'Senha resetada para o default') {
         message.success('Senha redefinida para o padrão com sucesso.');
       } else if (data.error === 'Usuario não encontrado') {
         message.error('Usuário não encontrado.');
@@ -61,7 +61,7 @@ export const PasswordResetPage = () => {
       setLoading(false);
     }
   
-    // Redireciona após 3 segundos (opcional)
+    // // Redireciona após 3 segundos (opcional)
     setTimeout(() => {
       navigate(PATH_AUTH.signin);
     }, 3000);

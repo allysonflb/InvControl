@@ -31,7 +31,7 @@ export const Logo = ({
     <Link to={href || '#'} className="logo-link">
       <Flex gap={others.gap || 'small'} align="center" {...others}>
         <img
-          src="/cafe.png"
+          src="/public/cafe.png"
           alt="design sparx logo"
           height={imgSize?.h || 480}
         />
@@ -39,15 +39,14 @@ export const Logo = ({
           level={5}
           type="secondary"
           style={{
-            color: 'black',
+            color,
             margin: 0,
             padding: `4px 8px`,
             backgroundColor: bgColor,
             borderRadius,
           }}
         >
-          {' '}
-          Vilalt Café
+          {'Vilalt Café'}
         </Typography.Title>
       </Flex>
     </Link>
