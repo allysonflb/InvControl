@@ -1,6 +1,26 @@
-<h1>Projeto InvControl - Dashboard de Gerenciamento de Estoque</h1>
+<h1>InvControl - Dashboard de Gerenciamento de Estoque</h1>
 
 <p>Este projeto é um dashboard para gerenciamento de estoque, desenvolvido com Laravel no backend e React no frontend.</p>
+
+<hr/>
+
+<h2>Interface do Frontend</h2>
+
+<p>Login:</p>
+<img src="screenshots/login.png" alt="Interface do Frontend - Login" width="500"/>
+<p>Criar conta:</p>
+<img src="screenshots/criarconta.png" alt="Interface do Frontend - Criar conta" width="500"/>
+<p>Esqueci a senha:</p>
+<img src="screenshots/esquecisenha.png" alt="Interface do Frontend - Esqueci a senha" width="500"/>
+<p>Dashboard:</p>
+<img src="screenshots/dashboard.png" alt="Interface do Frontend - Dashboard" width="500"/>
+
+<hr/>
+
+<h2>Testes Unitários</h2>
+
+<p>Testes unitários executados no Laravel:</p>
+<img src="screenshots/phptests.png" alt="Testes do backend" width="500"/>
 
 <h2>Tecnologias Utilizadas</h2>
 <div>
@@ -63,3 +83,4 @@
         <pre><code>npm run dev</code></pre>
     </li>
 </ol>
+
