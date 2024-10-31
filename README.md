@@ -1,21 +1,64 @@
-Procedimentos de instalação do projeto:
+<h1>Projeto InvControl - Dashboard de Gerenciamento de Estoque</h1>
 
-Backend:
-* Banco -> Postgres
-* Instalar XAMP(Windows) Ou PHP (Linux, MacOS)
-* Instalar composer
-* Clonar o projeto
-* Na raiz do projeto rodar o comando composer update
-* Setup do Banco:
-* * Criar banco com o nome invcontrol e senha 1234
-* Rodar o comando php artisan migrate
+<p>Este projeto é um dashboard para gerenciamento de estoque, desenvolvido com Laravel no backend e React no frontend.</p>
 
-FrontEnd:
-* Acessar a raiz do frontend na pasta reactinvcontrol, rodar o comando cp .env.example .env
-* Gerar uma key de autenticaçao do artisan com o comando php artisan key:generate
-* Deixar no env apenas a estrutura de APP Key e a parte de DB, configurando corretamente para o banco do projeto.
-* Rodar o comando npm run install:legacy e aguardar a finalização da instalação
-* Realizar o setup da rota de backend em src/global.ts , caso seja windows é diferente do que está no projeto.
-* Rodar o projeto com npm run dev
+<h2>Tecnologias Utilizadas</h2>
+<div>
+    <h3>Backend:</h3>
+    <p>Laravel 10x</p>
+    <img src="https://img.icons8.com/?size=100&id=hUvxmdu7Rloj&format=png&color=000000" height="30" width="32" alt="Laravel logo" />
+    <h3>Frontend:</h3>
+    <p>React com VITE e template antd-multipurpose-dashboard</p>
+    <img src="https://img.icons8.com/?size=100&id=NfbyHexzVEDk&format=png&color=000000" height="30" width="32" alt="React logo" />
+    <img src="https://img.icons8.com/?size=100&id=dJjTWMogzFzg&format=png&color=000000" height="30" width="32" alt="VITE logo" />
+</div>
 
+<hr/>
 
+<h2>Procedimentos de Instalação</h2>
+
+<h3>Backend</h3>
+<ol>
+    <li><strong>Banco de Dados</strong>: PostgreSQL</li>
+    <li><strong>Pré-requisitos:</strong> 
+        <ul>
+            <li>Instalar <a href="https://www.apachefriends.org/index.html">XAMPP</a> (Windows) ou PHP (Linux, macOS).</li>
+            <li>Instalar <a href="https://getcomposer.org/">Composer</a>.</li>
+        </ul>
+    </li>
+    <li><strong>Instalação:</strong>
+        <ul>
+            <li>Clonar o projeto.</li>
+            <li>Na raiz do projeto, executar:
+                <pre><code>composer update</code></pre>
+            </li>
+        </ul>
+    </li>
+    <li><strong>Configuração do Banco de Dados:</strong>
+        <ul>
+            <li>Criar um banco de dados chamado <code>invcontrol</code> com senha <code>1234</code>.</li>
+            <li>Executar as migrações com:
+                <pre><code>php artisan migrate</code></pre>
+            </li>
+        </ul>
+    </li>
+</ol>
+
+<h3>Frontend</h3>
+<ol>
+    <li>Navegar até a pasta do frontend <code>reactinvcontrol</code>.</li>
+    <li>Executar o comando:
+        <pre><code>cp .env.example .env</code></pre>
+    </li>
+    <li>Gerar a chave de autenticação do Laravel com:
+        <pre><code>php artisan key:generate</code></pre>
+    </li>
+    <li>Ajustar o arquivo <code>.env</code> para incluir apenas <code>APP_KEY</code> e as configurações do banco de dados.</li>
+    <li>Instalar as dependências com:
+        <pre><code>npm run install:legacy</code></pre>
+    </li>
+    <li>Configurar a rota do backend em <code>src/global.ts</code> (ajustes podem ser necessários para ambientes Windows).</li>
+    <li>Executar o projeto:
+        <pre><code>npm run dev</code></pre>
+    </li>
+</ol>
