@@ -7,20 +7,20 @@
 <h2>Interface do Frontend</h2>
 
 <p>Login:</p>
-<img src="screenshots/login.png" alt="Interface do Frontend - Login" width="500"/>
+<img src="screenshots/login.png" alt="Interface do Frontend - Login" width="600"/>
 <p>Criar conta:</p>
-<img src="screenshots/criarconta.png" alt="Interface do Frontend - Criar conta" width="500"/>
+<img src="screenshots/criarconta.png" alt="Interface do Frontend - Criar conta" width="600"/>
 <p>Esqueci a senha:</p>
-<img src="screenshots/esquecisenha.png" alt="Interface do Frontend - Esqueci a senha" width="500"/>
+<img src="screenshots/esquecisenha.png" alt="Interface do Frontend - Esqueci a senha" width="600"/>
 <p>Dashboard:</p>
-<img src="screenshots/dashboard.png" alt="Interface do Frontend - Dashboard" width="500"/>
+<img src="screenshots/dashboard.png" alt="Interface do Frontend - Dashboard" width="600"/>
 
 <hr/>
 
 <h2>Testes Unitários</h2>
 
 <p>Testes unitários executados no Laravel:</p>
-<img src="screenshots/phptests.png" alt="Testes do backend" width="500"/>
+<img src="screenshots/phptests.png" alt="Testes do backend" width="600"/>
 
 <h2>Tecnologias Utilizadas</h2>
 <div>
