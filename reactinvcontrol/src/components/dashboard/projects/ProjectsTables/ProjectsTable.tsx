@@ -140,6 +140,7 @@ export const ProjectsTable = ({ data, setData, ...others }: Props) => {
         dataSource={data}
         columns={COLUMNS}
         className="overflow-scroll"
+        rowKey="id"
         {...others}
 
       />
