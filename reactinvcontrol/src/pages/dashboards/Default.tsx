@@ -4,6 +4,7 @@ import { useStylesContext } from '../../context';
 import { useFetchData } from '../../hooks';
 import { useState, useEffect } from 'react';
 import { BASE_URL } from '../../global';
+import axios from 'axios';
 
 export const DefaultDashboardPage = () => {
   const stylesContext = useStylesContext();
@@ -13,7 +14,7 @@ export const DefaultDashboardPage = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm(); 
-  const [dataProducts, setDataProducts] = useState([]); 
+  const [dataProducts, setDataProducts] = useState([]);
 
   const handleAddClick = () => {
     setModalVisible(true); // Abre o modal
@@ -22,9 +23,32 @@ export const DefaultDashboardPage = () => {
   const handleModalOk = () => {
     form
       .validateFields()
-      .then((values) => {
+      .then(async (values) => {
         console.log('Form Values: ', values);
-        // Aqui você pode adicionar a lógica para adicionar um novo projeto
+        
+        try {
+          const response = await axios.post(`${BASE_URL}/api/produtosCreate`, {
+            nome: values.nome,
+            descricao: values.descricao,
+            quantidade: values.quantidade,
+            preco: 0,
+          });
+  
+          console.log('Resposta:', response.data);
+          
+          // Após a inserção bem-sucedida, busca os produtos atualizados
+          const result = await fetch(`${BASE_URL}/api/produtos`);
+          const updatedData = await result.json();
+          setDataProducts(updatedData["Produtos:"]); // Atualiza a lista de produtos
+          // Se a requisição for bem-sucedida
+          // setMensagem('Dados enviados com sucesso!');
+          console.log('Resposta:', response.data);
+        } catch (error) {
+          // Se houver erro na requisição
+          // setMensagem('Erro ao enviar os dados.');
+          console.error('Erro na requisição:', error);
+        }
+
         form.resetFields(); // Reseta os campos do formulário
         setModalVisible(false); // Fecha o modal
       })
@@ -73,8 +97,9 @@ export const DefaultDashboardPage = () => {
           </Card>
         </Col>
       </Row>
+
       <Modal
-        title="Adicionar Novo Projeto"
+        title="Adicionar Novo Produto"
         visible={modalVisible}
         onOk={handleModalOk}
         onCancel={() => setModalVisible(false)}
@@ -87,7 +112,7 @@ export const DefaultDashboardPage = () => {
           onFinish={handleModalOk}
         >
           <Form.Item
-            name="project_name"
+            name="nome"
             label="Produto"
             rules={[
               {
@@ -99,7 +124,7 @@ export const DefaultDashboardPage = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            name="client_name"
+            name="descricao"
             label="Descrição"
             rules={[
               { required: true, message: 'Por favor, insira a descrição!' },
@@ -108,7 +133,7 @@ export const DefaultDashboardPage = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            name="team_size"
+            name="quantidade"
             label="Quantidade"
             rules={[
               { required: true, message: 'Por favor, insira a quantidade!' },
@@ -118,7 +143,7 @@ export const DefaultDashboardPage = () => {
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Adicionar Projeto
+              Adicionar Produto
             </Button>
           </Form.Item>
         </Form>
