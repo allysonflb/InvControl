@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { BASE_URL } from '../../global';
 
-const { Title, Text, Link } = Typography;
+const { Title, Text } = Typography;
 
 type FieldType = {
   email?: string;

@@ -1,20 +1,15 @@
 import { Card, PageHeader, ProjectsTable } from '../../components';
-import { Col, Row, Button, Modal, Form, Input } from 'antd';
+import { Col, Row, Button, Modal, Form, Input, message } from 'antd';
 import { useStylesContext } from '../../context';
-import { useFetchData } from '../../hooks';
 import { useState, useEffect } from 'react';
 import { BASE_URL } from '../../global';
-import axios from 'axios';
+import { Projects } from '../../types';
 
 export const DefaultDashboardPage = () => {
   const stylesContext = useStylesContext();
-  const {} = useFetchData('../mocks/TasksList.json');
-  const { data: projectsData = [] } = useFetchData('../mocks/Projects.json');
-  const {} = useFetchData('../mocks/Notifications.json');
-
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm(); 
-  const [dataProducts, setDataProducts] = useState([]);
+  const [dataProducts, setDataProducts] = useState<Projects[]>([]);
 
   const handleAddClick = () => {
     setModalVisible(true); // Abre o modal
@@ -27,30 +22,33 @@ export const DefaultDashboardPage = () => {
         console.log('Form Values: ', values);
         
         try {
-          const response = await axios.post(`${BASE_URL}/api/produtosCreate`, {
-            nome: values.nome,
-            descricao: values.descricao,
-            quantidade: values.quantidade,
-            preco: 0,
+          const response = await fetch(`${BASE_URL}/api/produtosCreate`, {
+            method: 'POST', // Método HTTP
+            headers: {
+              'Content-Type': 'application/json', // Tipo de conteúdo
+            },
+            body: JSON.stringify({
+              nome: values.nome,
+              descricao: values.descricao,
+              quantidade: values.quantidade,
+              preco: 0
+            }),
           });
   
-          console.log('Resposta:', response.data);
-          
-          // Após a inserção bem-sucedida, busca os produtos atualizados
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+  
           const result = await fetch(`${BASE_URL}/api/produtos`);
           const updatedData = await result.json();
-          setDataProducts(updatedData["Produtos:"]); // Atualiza a lista de produtos
-          // Se a requisição for bem-sucedida
-          // setMensagem('Dados enviados com sucesso!');
-          console.log('Resposta:', response.data);
-        } catch (error) {
-          // Se houver erro na requisição
-          // setMensagem('Erro ao enviar os dados.');
-          console.error('Erro na requisição:', error);
+          setDataProducts(updatedData["Produtos:"]);
+        } catch (err) {
+          message.error('Cadastro falhou. Verifique as informações inseridas.');
+          console.error('Erro na requisição:', {err});
         }
 
-        form.resetFields(); // Reseta os campos do formulário
-        setModalVisible(false); // Fecha o modal
+        form.resetFields();
+        setModalVisible(false);
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
@@ -60,9 +58,9 @@ export const DefaultDashboardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/api/produtos`); // Faz a requisição GET para a URL
+        const response = await fetch(`${BASE_URL}/api/produtos`);
         const result = await response.json();
-        setDataProducts(result["Produtos:"]); // Salva os dados na variável de estado
+        setDataProducts(result["Produtos:"]);
         console.log('Dados recebidos da API:', result["Produtos:"]);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
@@ -93,7 +91,7 @@ export const DefaultDashboardPage = () => {
               </Button>
             }
           >
-            <ProjectsTable key="all-projects-table" data={dataProducts} />
+            <ProjectsTable key="all-projects-table" data={dataProducts} setData={setDataProducts} />
           </Card>
         </Col>
       </Row>

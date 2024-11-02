@@ -9,6 +9,7 @@ export type ProjectType =
 
 export type Projects = {
   id: string;
+  id_real: string;
   nome: string;
   preco: string;
   quantidade: string;
