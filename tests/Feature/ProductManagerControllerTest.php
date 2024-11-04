@@ -138,4 +138,44 @@ class ProductManagerControllerTest extends TestCase
 
         $this->assertDatabaseMissing('produtos', ['id' => $produto->id]);
     }
+
+    /** @test */
+    public function Relatorio_estoque_zero()
+    {
+        $data = [
+            'nome' => 'Produto Exemplo',
+            'preco' => '249.99',
+            'quantidade' => 0,
+            'descricao' => 'Descrição do produto exemplo'
+        ];
+    
+        $response = $this->postJson('/api/produtosCreate', $data);
+    
+        $response->assertStatus(200);
+    
+        $response2 = $this->getJson('/api/produtosZero');
+    
+        $response2->assertStatus(200);
+    
+        $response2->assertJsonFragment([
+            'Produtos:' => [
+                [
+                    'nome' => 'Produto Exemplo',
+                    'preco' => '249.99',
+                    'quantidade' => 0,
+                    'descricao' => 'Descrição do produto exemplo',
+                    'id' => $response2->json('Produtos:')[0]['id'],
+                    'data_criacao' => $response2->json('Produtos:')[0]['data_criacao'],
+                    'id_real' => $response2->json('Produtos:')[0]['id_real']
+                ]
+            ]
+        ]);
+    
+        $this->assertDatabaseHas('produtos', [
+            'nome' => 'Produto Exemplo',
+            'preco' => '249.99',
+            'quantidade' => 0,
+            'descricao' => 'Descrição do produto exemplo'
+        ]);
+    }
 }

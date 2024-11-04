@@ -11,3 +11,4 @@ Route::get('/produtos', [ProductManagerController::class, 'produtosList']);
 Route::post('/produtosCreate', [ProductManagerController::class, 'produtosCreate']);
 Route::put('/produtosUpdate/{id}', [ProductManagerController::class, 'produtosUpdate']);
 Route::delete('/produtosDelete/{id}', [ProductManagerController::class, 'produtosDelete']);
+Route::get('/produtosZero', [ProductManagerController::class, 'produtosZero']);
