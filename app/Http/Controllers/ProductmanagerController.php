@@ -107,4 +107,17 @@ class ProductManagerController extends Controller
         return response()->json(['Produto deletado:' => $responseData]);
     }
 
+    public function produtosZero(): JsonResponse
+    {
+        $produtos = Products::where('quantidade', 0)->get();
+
+        $produtos = $produtos->map(function ($produto, $index) {
+            $produto->id_real = $produto->id;
+            $produto->id = $index + 1;
+            return $produto;
+        });
+        
+        return response()->json(['Produtos:' => $produtos]);
+    }
+
 };
