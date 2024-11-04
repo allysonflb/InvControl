@@ -115,7 +115,6 @@ export const ProjectsTable = ({ data, setData, ...others }: Props) => {
                 okType: 'danger',
                 cancelText: 'Não',
                 onOk: () => {
-                  // Aqui você pode adicionar a lógica para excluir o produto, como uma requisição API
                   handleDelete(record.id_real);
                 },
                 onCancel: () => {

@@ -12,7 +12,7 @@ export const DefaultDashboardPage = () => {
   const [dataProducts, setDataProducts] = useState<Projects[]>([]);
 
   const handleAddClick = () => {
-    setModalVisible(true); // Abre o modal
+    setModalVisible(true); 
   };
 
   const handleModalOk = () => {
@@ -23,9 +23,9 @@ export const DefaultDashboardPage = () => {
         
         try {
           const response = await fetch(`${BASE_URL}/api/produtosCreate`, {
-            method: 'POST', // Método HTTP
+            method: 'POST', 
             headers: {
-              'Content-Type': 'application/json', // Tipo de conteúdo
+              'Content-Type': 'application/json', 
             },
             body: JSON.stringify({
               nome: values.nome,
@@ -67,11 +67,11 @@ export const DefaultDashboardPage = () => {
       }
     };
   
-    fetchData(); // Chama a função fetchData inicialmente
+    fetchData(); 
   
-    const intervalId = setInterval(fetchData, 60000); // Configura o intervalo para chamar fetchData a cada 60 segundos
+    const intervalId = setInterval(fetchData, 60000); 
   
-    return () => clearInterval(intervalId); // Limpa o intervalo quando o componente for desmontado
+    return () => clearInterval(intervalId); 
   }, []);
   
   useEffect(() => {
@@ -101,7 +101,7 @@ export const DefaultDashboardPage = () => {
         visible={modalVisible}
         onOk={handleModalOk}
         onCancel={() => setModalVisible(false)}
-        footer={null} // Remove o footer padrão para personalização
+        footer={null} 
       >
         <Form
           form={form}
