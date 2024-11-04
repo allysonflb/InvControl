@@ -16,6 +16,7 @@ class ProductManagerController extends Controller
         $produtos = Products::all();
 
         $produtos = $produtos->map(function ($produto, $index) {
+            $produto->id_real = $produto->id;
             $produto->id = $index + 1;
             return $produto;
         });

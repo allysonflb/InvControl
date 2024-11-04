@@ -1,32 +1,54 @@
 import { Card, PageHeader, ProjectsTable } from '../../components';
-import { Col, Row, Button, Modal, Form, Input } from 'antd';
+import { Col, Row, Button, Modal, Form, Input, message } from 'antd';
 import { useStylesContext } from '../../context';
-import { useFetchData } from '../../hooks';
 import { useState, useEffect } from 'react';
 import { BASE_URL } from '../../global';
+import { Projects } from '../../types';
 
 export const DefaultDashboardPage = () => {
   const stylesContext = useStylesContext();
-  const {} = useFetchData('../mocks/TasksList.json');
-  const { data: projectsData = [] } = useFetchData('../mocks/Projects.json');
-  const {} = useFetchData('../mocks/Notifications.json');
-
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm(); 
-  const [dataProducts, setDataProducts] = useState([]); 
+  const [dataProducts, setDataProducts] = useState<Projects[]>([]);
 
   const handleAddClick = () => {
-    setModalVisible(true); // Abre o modal
+    setModalVisible(true); 
   };
 
   const handleModalOk = () => {
     form
       .validateFields()
-      .then((values) => {
+      .then(async (values) => {
         console.log('Form Values: ', values);
-        // Aqui você pode adicionar a lógica para adicionar um novo projeto
-        form.resetFields(); // Reseta os campos do formulário
-        setModalVisible(false); // Fecha o modal
+        
+        try {
+          const response = await fetch(`${BASE_URL}/api/produtosCreate`, {
+            method: 'POST', 
+            headers: {
+              'Content-Type': 'application/json', 
+            },
+            body: JSON.stringify({
+              nome: values.nome,
+              descricao: values.descricao,
+              quantidade: values.quantidade,
+              preco: 0
+            }),
+          });
+  
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+  
+          const result = await fetch(`${BASE_URL}/api/produtos`);
+          const updatedData = await result.json();
+          setDataProducts(updatedData["Produtos:"]);
+        } catch (err) {
+          message.error('Cadastro falhou. Verifique as informações inseridas.');
+          console.error('Erro na requisição:', {err});
+        }
+
+        form.resetFields();
+        setModalVisible(false);
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
@@ -36,20 +58,20 @@ export const DefaultDashboardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/api/produtos`); // Faz a requisição GET para a URL
+        const response = await fetch(`${BASE_URL}/api/produtos`);
         const result = await response.json();
-        setDataProducts(result["Produtos:"]); // Salva os dados na variável de estado
+        setDataProducts(result["Produtos:"]);
         console.log('Dados recebidos da API:', result["Produtos:"]);
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
       }
     };
   
-    fetchData(); // Chama a função fetchData inicialmente
+    fetchData(); 
   
-    const intervalId = setInterval(fetchData, 60000); // Configura o intervalo para chamar fetchData a cada 60 segundos
+    const intervalId = setInterval(fetchData, 60000); 
   
-    return () => clearInterval(intervalId); // Limpa o intervalo quando o componente for desmontado
+    return () => clearInterval(intervalId); 
   }, []);
   
   useEffect(() => {
@@ -69,16 +91,17 @@ export const DefaultDashboardPage = () => {
               </Button>
             }
           >
-            <ProjectsTable key="all-projects-table" data={dataProducts} />
+            <ProjectsTable key="all-projects-table" data={dataProducts} setData={setDataProducts} />
           </Card>
         </Col>
       </Row>
+
       <Modal
-        title="Adicionar Novo Projeto"
+        title="Adicionar Novo Produto"
         visible={modalVisible}
         onOk={handleModalOk}
         onCancel={() => setModalVisible(false)}
-        footer={null} // Remove o footer padrão para personalização
+        footer={null} 
       >
         <Form
           form={form}
@@ -87,7 +110,7 @@ export const DefaultDashboardPage = () => {
           onFinish={handleModalOk}
         >
           <Form.Item
-            name="project_name"
+            name="nome"
             label="Produto"
             rules={[
               {
@@ -99,7 +122,7 @@ export const DefaultDashboardPage = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            name="client_name"
+            name="descricao"
             label="Descrição"
             rules={[
               { required: true, message: 'Por favor, insira a descrição!' },
@@ -108,7 +131,7 @@ export const DefaultDashboardPage = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            name="team_size"
+            name="quantidade"
             label="Quantidade"
             rules={[
               { required: true, message: 'Por favor, insira a quantidade!' },
@@ -118,7 +141,7 @@ export const DefaultDashboardPage = () => {
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Adicionar Projeto
+              Adicionar Produto
             </Button>
           </Form.Item>
         </Form>

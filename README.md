@@ -63,23 +63,26 @@
             </li>
         </ul>
     </li>
+    <li><strong>Executar o comando:</strong>
+        <pre><code>cp .env.example .env</code></pre>
+    </li>
+    <li><strong>Gerar a chave de autenticação do Laravel com:</strong>
+        <pre><code>php artisan key:generate</code></pre>
+    </li>
+    <li><strong>Ajustar o arquivo <code>.env</code> para incluir apenas <code>APP_KEY</code> e as configurações do banco de dados.</strong></li>
 </ol>
 
 <h3>Frontend</h3>
-<ol>
-    <li>Navegar até a pasta do frontend <code>reactinvcontrol</code>.</li>
-    <li>Executar o comando:
-        <pre><code>cp .env.example .env</code></pre>
+<ol>   
+    <li><strong>Navegar até a pasta do frontend <code>reactinvcontrol</code> e alterar a rota.</strong>
     </li>
-    <li>Gerar a chave de autenticação do Laravel com:
-        <pre><code>php artisan key:generate</code></pre>
-    </li>
-    <li>Ajustar o arquivo <code>.env</code> para incluir apenas <code>APP_KEY</code> e as configurações do banco de dados.</li>
-    <li>Instalar as dependências com:
+    <li><strong>Instalar as dependências com:</strong>
         <pre><code>npm run install:legacy</code></pre>
     </li>
-    <li>Configurar a rota do backend em <code>src/global.ts</code> (ajustes podem ser necessários para ambientes Windows).</li>
-    <li>Executar o projeto:
+    <li><strong>Configurar a rota do backend em <code>src/global.ts</code> (ajustes podem ser necessários para ambientes Windows).</strong>
+        <pre><code>export const BASE_URL = 'http://localhost/InvControl/public';</code></pre>
+    </li>
+    <li><strong>Executar o projeto:</strong>
         <pre><code>npm run dev</code></pre>
     </li>
 </ol>

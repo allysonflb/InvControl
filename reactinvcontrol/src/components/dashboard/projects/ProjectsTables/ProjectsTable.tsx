@@ -11,20 +11,64 @@ import {
 import { Projects } from '../../../../types';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useState } from 'react';
+import { BASE_URL } from '../../../../global';
 
 type Props = {
   data: Projects[];
+  setData: React.Dispatch<React.SetStateAction<Projects[]>>; 
 } & TableProps<any>;
 
-export const ProjectsTable = ({ data, ...others }: Props) => {
+export const ProjectsTable = ({ data, setData, ...others }: Props) => {
   const [open, setOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Projects | null>(null);
+
+  const handleDelete = async (id: string) => {
+    const response = await fetch(`${BASE_URL}/api/produtosDelete/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (response.ok) {
+      setData((prevData) => prevData.filter((item) => item.id_real !== id));
+      console.log('Produto excluído com sucesso');
+    } else {
+      console.error('Erro ao excluir o produto');
+    }
+  };
+
+  const handleUpdate = async (values: Projects) => {
+    console.log({values})
+    const response = await fetch(`${BASE_URL}/api/produtosUpdate/${selectedProject?.id_real}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        nome: values.nome,
+        descricao: values.descricao,
+        quantidade: values.quantidade,
+        preco: 0
+      }),
+    });
+
+    if (response.ok) {
+      const updatedProduct = await response.json();
+      console.log('Produto atualizado com sucesso:', updatedProduct);
+      const teste = data.map((item) => (item.id_real === selectedProject?.id_real ? updatedProduct : item))
+      console.log(teste)
+      setData((prevData) =>
+        prevData.map((item) => (item.id_real === selectedProject?.id_real ? {...values} : item))
+      );
+      setOpen(false);
+    } else {
+      console.error('Erro ao atualizar o produto');
+    }
+  };
 
   const COLUMNS = [
     {
       title: 'ID',
       dataIndex: 'id',
-      key: 'nome',
+      key: 'id',
     },
     {
       title: 'Produto',
@@ -62,16 +106,31 @@ export const ProjectsTable = ({ data, ...others }: Props) => {
               setOpen(true);
             }}
           />
-          <DeleteOutlined onClick={() => {}} />
+          <DeleteOutlined
+            onClick={() => {
+              Modal.confirm({
+                title: 'Deseja realmente excluir este produto?',
+                content: 'Essa ação não pode ser revertida.',
+                okText: 'Sim',
+                okType: 'danger',
+                cancelText: 'Não',
+                onOk: () => {
+                  handleDelete(record.id_real);
+                },
+                onCancel: () => {
+                  console.log('Exclusão cancelada');
+                },
+              });
+            }}
+          />
         </Space>
       ),
     },
   ];
 
   const onFinish = (values: Projects) => {
-    console.log('Form Values: ', values);
-    // Aqui você pode adicionar a lógica para atualizar o projeto, se necessário
-    setOpen(false); // Fecha o modal após a submissão
+    handleUpdate(values);
+    setOpen(false);
   };
 
   return (
@@ -80,25 +139,41 @@ export const ProjectsTable = ({ data, ...others }: Props) => {
         dataSource={data}
         columns={COLUMNS}
         className="overflow-scroll"
+        rowKey="id"
         {...others}
+
       />
-      <Modal
-        title="Detalhes do Projeto"
+      {open && <Modal
+        title="Detalhes do Produto"
         centered
         open={open}
         onCancel={() => setOpen(false)}
         width={800}
-        footer={null} // Remover o footer padrão para personalizar
+        footer={null}
       >
         {selectedProject && (
           <Form
             name="project_form"
             layout="vertical"
-            initialValues={selectedProject} // Preencher os valores iniciais do formulário
+            initialValues={selectedProject}
             onFinish={onFinish}
           >
             <Form.Item
-              name="project_name"
+              name="id_real"
+              style={{ display: 'none' }}
+              initialValue={selectedProject.id_real}
+            >
+              <Input type="hidden" />
+            </Form.Item>
+            <Form.Item
+              name="id"
+              label="ID"
+              initialValue={selectedProject.id}
+            >
+              <Input disabled />
+            </Form.Item>
+            <Form.Item
+              name="nome"
               label="Produto"
               rules={[
                 {
@@ -110,7 +185,7 @@ export const ProjectsTable = ({ data, ...others }: Props) => {
               <Input />
             </Form.Item>
             <Form.Item
-              name="client_name"
+              name="descricao"
               label="Descrição"
               rules={[
                 { required: true, message: 'Por favor, insira a quantidade!' },
@@ -119,7 +194,7 @@ export const ProjectsTable = ({ data, ...others }: Props) => {
               <Input />
             </Form.Item>
             <Form.Item
-              name="team_size"
+              name="quantidade"
               label="Quantidade"
               rules={[
                 { required: true, message: 'Por favor, insira a quantidade!' },
@@ -129,12 +204,12 @@ export const ProjectsTable = ({ data, ...others }: Props) => {
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Atualizar Projeto
+                Atualizar Produto
               </Button>
             </Form.Item>
           </Form>
         )}
-      </Modal>
+      </Modal>}
     </>
   );
 };
