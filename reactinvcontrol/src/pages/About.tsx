@@ -8,14 +8,48 @@ import { BASE_URL } from '../global';
 export const AboutPage = () => {
 const stylesContext = useStylesContext();
 const contentRef = useRef<HTMLDivElement>(null);
-const reactToPrintFn = useReactToPrint({ contentRef });
 const [dataProducts, setDataProducts] = useState([]);
-const onChange = (date:any, dateString:any) => {
-  console.log(date, dateString);
-};
+
+const handlePrint = useReactToPrint({
+  content: () => contentRef.current,
+  documentTitle: 'Termo de Adesão',
+  onBeforeGetContent: () => {
+    const printStyles = `
+      @page {
+        size: A4;
+        margin: 20mm;
+      }
+      @media print {
+        page-break-before: always;
+        display: block;
+        body {
+          width: 210mm;
+          height: 297mm;
+          margin: 0;
+          padding: 0;
+        }
+        .print-adjust {
+          width: 100%;
+          margin: 0;
+          padding: 0;
+        }
+        .pagebreak {
+          margin-top: 1rem;
+          display: block;
+          page-break-before: always;
+        }
+      }
+    `;
+    const styleSheet = document.createElement('style');
+    styleSheet.type = 'text/css';
+    styleSheet.innerText = printStyles;
+    document.head.appendChild(styleSheet);
+  },
+});
+
 const handleButtonClick = () => {
   message.success('Relatório gerado com sucesso!');
-  reactToPrintFn();
+  handlePrint();
 };
 
 const columns = [
@@ -63,45 +97,39 @@ const columns = [
   
     fetchData(); 
   
-    const intervalId = setInterval(fetchData, 10000); 
+    const intervalId = setInterval(fetchData, 60000); 
   
     return () => clearInterval(intervalId); 
   }, []);
   
 
-  const template_em_branco_impressao = <>
+  const template_impressao = <>
     <div ref={contentRef} className="print-adjust">
-    <Flex vertical> 
-      {/* <PageHeader title="Relatório de produtos faltantes" /> */}
-      <Space direction="vertical" size="small">
-        <Typography.Title
-          level={4}
-          style={{ padding: 0, margin: 0, textTransform: 'capitalize', textAlign: 'center' }}
-        >
-          Relatório de produtos faltantes
-        </Typography.Title>
-      </Space>
-        <Row {...stylesContext?.rowProps}>
-        <Col span={24}>
-          <Card
-            title="Listagem de Produtos"
-            style={{ textAlign: 'left' }}
+      <Flex vertical> 
+        <Space direction="vertical" size="small">
+          <Typography.Title
+            level={4}
+            style={{ padding: 0, margin: 0, textTransform: 'capitalize', textAlign: 'center' }}
           >
-            <Table dataSource={dataProducts} columns={columns} pagination={false} />
-          </Card>
-        </Col>
-      </Row>
-    </Flex>  
+            Relatório de produtos faltantes
+          </Typography.Title>
+        </Space>
+          <Row {...stylesContext?.rowProps}>
+          <Col span={24}>
+            <Card
+              title="Listagem de Produtos"
+              style={{ textAlign: 'left' }}
+            >
+              <Table dataSource={dataProducts} columns={columns} pagination={false} />
+            </Card>
+          </Col>
+        </Row>
+      </Flex>  
     </div>
   </>
 
   return (
     <div>
-      <div style={{ display: 'none' }}>
-        <div ref={contentRef} className="print-adjust">
-            {template_em_branco_impressao}
-        </div>
-      </div>
       <Flex vertical>
         <PageHeader title="Emissão de relatório" />
         <Space direction="horizontal">
@@ -121,6 +149,11 @@ const columns = [
           </Button>
         </Space>
       </Flex>
+      <div style={{ display: 'none' }}>
+        <div ref={contentRef} className="print-adjust">
+            {template_impressao}
+        </div>
+      </div>
     </div>
   );
 };
