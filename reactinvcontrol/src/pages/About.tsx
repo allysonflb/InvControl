@@ -134,7 +134,7 @@ const columns = [
         <PageHeader title="Emissão de relatório" />
         <Space direction="horizontal">
           <Typography.Text strong style={{ fontSize: '16px' }}>
-            Produtos com estoque 0:
+            Produtos em falta:
           </Typography.Text>
           <Button
             type="primary"
