@@ -12,7 +12,7 @@ const [dataProducts, setDataProducts] = useState([]);
 
 const handlePrint = useReactToPrint({
   content: () => contentRef.current,
-  documentTitle: 'Termo de Adesão',
+  documentTitle: 'Relatório de produtos em falta',
   onBeforeGetContent: () => {
     const printStyles = `
       @page {
@@ -111,7 +111,7 @@ const columns = [
             level={4}
             style={{ padding: 0, margin: 0, textTransform: 'capitalize', textAlign: 'center' }}
           >
-            Relatório de produtos faltantes
+            Relatório de produtos em falta
           </Typography.Title>
         </Space>
           <Row {...stylesContext?.rowProps}>
