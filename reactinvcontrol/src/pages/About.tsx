@@ -109,7 +109,7 @@ const columns = [
         <Space direction="vertical" size="small">
           <Typography.Title
             level={4}
-            style={{ padding: 0, margin: 0, textTransform: 'capitalize', textAlign: 'center' }}
+            style={{ padding: 0, margin: 0, textAlign: 'center' }}
           >
             Relatório de produtos em falta
           </Typography.Title>
