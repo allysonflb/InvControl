@@ -15,7 +15,7 @@ import {
 } from '../pages';
 import { DashboardLayout } from '../layouts';
 import React, { ReactNode, useEffect } from 'react';
-import { AboutPage } from '../pages/About.tsx';
+import { RelatorioPage } from '../pages/Relatorio.tsx';
 
 // Custom scroll restoration function
 export const ScrollToTop: React.FC = () => {
@@ -128,14 +128,14 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/about',
+    path: '/relatorio',
     element: <PageWrapper children={<DashboardLayout />} />,
     errorElement: <ErrorPage />,
     children: [
       {
         index: true,
         path: '',
-        element: <AboutPage />,
+        element: <RelatorioPage />,
       },
     ],
   },
