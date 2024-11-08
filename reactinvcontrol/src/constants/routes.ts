@@ -22,7 +22,7 @@ const ROOTS_FILE_MGMT = '/file-manager';
 const ROOTS_INBOX = '/inbox';
 const ROOTS_CALENDAR = '/calendar';
 const ROOTS_ERRORS = '/errors';
-const ROOTS_ABOUT = '/about';
+const ROOTS_ABOUT = '/relatorio';
 
 export const PATH_LANDING = {
   root: ROOTS_LANDING,

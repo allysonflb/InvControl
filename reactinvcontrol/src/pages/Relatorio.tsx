@@ -5,7 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 import { useEffect, useState, useRef } from 'react';
 import { BASE_URL } from '../global';
 
-export const AboutPage = () => {
+export const RelatorioPage = () => {
 const stylesContext = useStylesContext();
 const contentRef = useRef<HTMLDivElement>(null);
 const [dataProducts, setDataProducts] = useState([]);
